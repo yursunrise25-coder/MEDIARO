@@ -42,7 +42,7 @@
         @media (min-width: 1024px) {
             body {
                 display: grid;
-                grid-template-columns: 1fr 360px;
+                grid-template-columns: minmax(0, 1fr) minmax(280px, 320px);
                 grid-template-rows: 1fr;
                 height: 100vh;
                 overflow: hidden;
@@ -71,7 +71,8 @@
             .game-panel {
                 grid-column: 2;
                 grid-row: 1;
-                width: 100%;
+                width: min(100%, 320px);
+                max-width: 320px;
                 height: 100vh;
                 display: flex !important;
                 flex-direction: column;
@@ -90,11 +91,11 @@
             }
 
             .game-main .monopoly-board {
-                width: 100%;
-                height: auto;
-                aspect-ratio: 2.5 / 1;
-                max-height: 70vh;
+                width: min(100%, calc(100vw - 360px - 40px));
                 max-width: 100%;
+                max-height: calc(100vh - 120px);
+                height: auto;
+                aspect-ratio: 2.2 / 1;
             }
 
             .game-main .control-group {
@@ -823,9 +824,9 @@
             background: #F6EBD3;
             padding: 16px;
             border-radius: 18px;
-            width: min(100%, 1000px);
+            width: min(100%, calc(100vw - 360px - 40px));
             max-width: 100%;
-            min-height: 380px;
+            max-height: calc(100vh - 120px);
             aspect-ratio: 2.2 / 1;
             position: relative;
             border: 4px solid #C89B3C;
@@ -835,6 +836,7 @@
         }
 
         .tile {
+            background: rgba(255,255,255,0.95);
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -2952,6 +2954,7 @@
             { name: "Jambi", side: "corner", music: "", image: "https://raw.githubusercontent.com/riyanarahman320/26/main/BANDUNG.png" },
             { name: "Sumatera Barat", side: "side-left", music: "", image: "https://raw.githubusercontent.com/AYAA-lab/resonance-odyssey/0e31389538a02c42684025cbc04d8fb04add8b76/JAKARTA.png" },
             { name: "Sumatera Selatan", side: "side-left", music: "", image: "https://raw.githubusercontent.com/AYAA-lab/resonance-odyssey/0e31389538a02c42684025cbc04d8fb04add8b76/JAKARTA.png" },
+            { name: "Bali", side: "side-left", music: "", image: "https://raw.githubusercontent.com/AYAA-lab/resonance-odyssey/0e31389538a02c42684025cbc04d8fb04add8b76/BALI.png" },
         ];
 
         const cityQuestions = {
@@ -3008,7 +3011,7 @@
             [1,1], [1,2], [1,3], [1,4], [1,5], 
             [2,5], [3,5], [4,5], [5,5], 
             [5,4], [5,3], [5,2], [5,1], 
-            [4,1], [3,1]
+            [4,1], [3,1], [2,1]
         ];
 
         let state = {
@@ -3233,10 +3236,10 @@
                 schoolElement.innerText = state.schoolName || 'Sekolah Nusantara';
             }
             if (visitedElement) {
-                visitedElement.innerText = `${state.visited.size} / ${cityData.length} Kota`;
+                visitedElement.innerText = `${state.visited.size} / ${cityData.length - 1} Kota`;
             }
             if (panelProgress) {
-                panelProgress.innerText = `${state.visited.size} / ${cityData.length} Kota`;
+                panelProgress.innerText = `${state.visited.size} / ${cityData.length - 1} Kota`;
             }
             if (scoreElement) {
                 scoreElement.innerText = state.score;
@@ -3251,7 +3254,7 @@
                 panelIncorrect.innerText = state.incorrectAnswers;
             }
             if (totalCities) {
-                totalCities.innerText = cityData.length;
+                totalCities.innerText = cityData.length - 1;
             }
         }
 
@@ -3291,9 +3294,6 @@
                     let inner = `<span style="z-index: 10;">${city.name}</span>`;
 
                     // Set background image - use city.image if available, otherwise use default JAKARTA.png
-                    const imageUrl = city.image || defaultImage;
-                    tile.style.backgroundImage = `url(${imageUrl})`;
-
                     tile.innerHTML = inner;
                     board.appendChild(tile);
             });
